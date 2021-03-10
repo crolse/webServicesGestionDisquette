@@ -10,7 +10,11 @@ const swaggerFile = require('./swagger_output.json')
 
 
 
-
+var options = {
+    swaggerOptions: {
+        authAction: { JWT: { name: "JWT", schema: { type: "apiKey", in: "header", name: "Authorization", description: "" }, value: "Bearer <JWT>" } }
+    }
+}
 
 
 const app = express();
@@ -25,6 +29,9 @@ app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
+
+
 //#region Add Disquette
 app.post("/disquette", (req, res) => {
     try {
@@ -37,10 +44,34 @@ app.post("/disquette", (req, res) => {
 });
 //#endregion
 
+//#region Validate disquette 
+app.post("/acceptDisquette", (req, res) => {
+    try {
+        req.body.id = req.body.idDisquette
+        dbMysql.dbMysql.query('Update disquette set isValid=1 WHERE id=?', [req.body.id], function (error, results, fields) {
+            if (error) throw error;
+            res.status(200).json({ message: "disquette Validé" })
+        });
+    } catch (error) { res.status(500).json({ message: "unknown error" }) }
+});
+//#endregion
+
+//#region Delete disquette by an admin
+app.delete('/deleteDisquette', function (req, res) {
+    try {
+        req.body.id = req.body.idDisquette
+        dbMysql.dbMysql.query('DELETE FROM disquette WHERE id=?', [req.body.id], function (error, results, fields) {
+            if (error) throw error;
+            res.status(200).json({ message: "Disquette supprimé" })
+        });
+    } catch { res.status(500).json({ message: "unknown error" }) }
+});
+//#endregion
+
 //#region Recover All Disquette
 app.get("/getAllDisquette", (req, res) => {
     try {
-        dbMysql.dbMysql.query("SELECT * FROM disquette", function (err, result) {
+        dbMysql.dbMysql.query("SELECT * FROM disquette ", function (err, result) {
             if (err) throw err;
             console.log(result);
             res.status(200).json(result)
@@ -112,10 +143,3 @@ app.delete('/user', function (req, res) {
 });
 //#endregion
 
-// set port, listen for requests
-/*
-const PORT = process.env.PORT || 8081;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
-
-});*/
