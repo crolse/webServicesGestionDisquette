@@ -2,8 +2,8 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "REST API",
-    "description": ""
+    "title": "API GESTION DONNEES",
+    "description": "Warning : Cette documentation api ne prends pas en compte l'authentification par token"
   },
   "host": "localhost:8081",
   "basePath": "/",
@@ -11,13 +11,25 @@
   "schemes": [
     "http"
   ],
-  "consumes": [],
-  "produces": [],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "C'est ici que nous devrions entrer la token déliverer par le serveur lors de la connexion"
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "paths": {
     "/disquette": {
       "post": {
         "tags": [],
-        "description": "",
+        "description": "Permet d'ajouter une disquette",
         "parameters": [
           {
             "name": "obj",
@@ -26,12 +38,74 @@
               "type": "object",
               "properties": {
                 "userId": {
-                  "type": "string",
-                  "example": "any"
+                  "type": "integer",
+                  "example": 26
                 },
                 "content": {
                   "type": "string",
+                  "example": "lorem ipsum"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/acceptDisquette": {
+      "post": {
+        "tags": [],
+        "description": "Permet à un administrateur de valider une disquette",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
                   "example": "any"
+                },
+                "idDisquette": {
+                  "type": "integer",
+                  "example": 26
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/deleteDisquette": {
+      "delete": {
+        "tags": [],
+        "description": "Permet à un administrateur de supprimer une disquette",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "idDisquette": {
+                  "type": "integer",
+                  "example": 26
                 }
               }
             }
@@ -65,7 +139,7 @@
     "/favori": {
       "post": {
         "tags": [],
-        "description": "",
+        "description": "Permet d'ajouter une disquette a la liste des favoris d'un utilisateur donné",
         "parameters": [
           {
             "name": "obj",
@@ -74,12 +148,12 @@
               "type": "object",
               "properties": {
                 "userId": {
-                  "type": "string",
-                  "example": "any"
+                  "type": "integer",
+                  "example": "26"
                 },
                 "idDisquette": {
-                  "type": "string",
-                  "example": "any"
+                  "type": "integer",
+                  "example": "20"
                 }
               }
             }
@@ -96,7 +170,7 @@
       },
       "delete": {
         "tags": [],
-        "description": "",
+        "description": "Permet de retiré de la liste des favoris une disquette d'un utilisateur donné",
         "parameters": [
           {
             "name": "obj",
@@ -105,11 +179,11 @@
               "type": "object",
               "properties": {
                 "userId": {
-                  "type": "string",
+                  "type": "integer",
                   "example": "any"
                 },
                 "idDisquette": {
-                  "type": "string",
+                  "type": "integer",
                   "example": "any"
                 }
               }
@@ -129,13 +203,13 @@
     "/favori/{userId}": {
       "get": {
         "tags": [],
-        "description": "",
+        "description": "Récupere toutes les diquettes Likées d'un utilisateur donné",
         "parameters": [
           {
             "name": "userId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "responses": {
@@ -151,7 +225,7 @@
     "/getAllUser": {
       "get": {
         "tags": [],
-        "description": "",
+        "description": "Permet de récupérer tous les utilisateur qui ne sont pas admin",
         "parameters": [],
         "responses": {
           "200": {
@@ -166,7 +240,7 @@
     "/user": {
       "delete": {
         "tags": [],
-        "description": "",
+        "description": "Permet a un administrateur de supprimer un utilisateur",
         "parameters": [
           {
             "name": "obj",
@@ -174,13 +248,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "userIdDelete": {
-                  "type": "string",
-                  "example": "any"
-                },
                 "userId": {
-                  "type": "string",
-                  "example": "any"
+                  "type": "integer",
+                  "example": "1"
+                },
+                "userIdDelete": {
+                  "type": "integer",
+                  "example": "2"
                 }
               }
             }
@@ -189,9 +263,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
           },
           "500": {
             "description": "Internal Server Error"

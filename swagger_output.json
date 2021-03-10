@@ -59,6 +59,64 @@
         }
       }
     },
+    "/acceptDisquette": {
+      "post": {
+        "tags": [],
+        "description": "Permet à un administrateur de valider une disquette",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "idDisquette": {
+                  "type": "integer",
+                  "example": 26
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/deleteDisquette": {
+      "delete": {
+        "tags": [],
+        "description": "Permet à un administrateur de supprimer une disquette",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "idDisquette": {
+                  "type": "integer",
+                  "example": 26
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/getAllDisquette": {
       "get": {
         "tags": [],

@@ -14,7 +14,7 @@ const doc = {
     schemes: ['http'],
     consumes: ['application/json'],
     produces: ['application/json'],
-   
+
     securityDefinitions: {
         Bearer: {
             type: "apiKey",
